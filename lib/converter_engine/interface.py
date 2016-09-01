@@ -3,6 +3,7 @@ from .engine    import Engine as ConverterEngine
 from ..database import Database
 from ..data     import Data
 from curtsies   import fmtstr
+import pymongo
 
 class ConverterInterface:
 	def __init__(self):
