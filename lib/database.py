@@ -11,4 +11,5 @@ class Database:
 
 		# Ensuring Indexes
 		db.data.create_index([("permalink", pymongo.ASCENDING)], unique=True)
+		db.failed_urls.create_index([("permalink", pymongo.ASCENDING)], unique=True)
 		return db

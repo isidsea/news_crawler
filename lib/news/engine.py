@@ -39,12 +39,32 @@ class Engine:
 				print("[news_engine][debug] Inserting to DB...")
 				db = Database.get_db()
 				db.data.insert_one(document)
+				print("[news_engine][debug] One Document Inserted!")
 			except ValidationError as ex:
 				print(fmtstr("[news_engine][error] %s" % ex, "red"))
+				try:
+					# Inserting to failed URL list
+					document = self.build_failed_document(article)
+					db       = Database.get_db()
+					db.failed_urls.insert_one(document)
+				except pymongo.errors.DuplicateKeyError:
+					pass
 			except ParseError as ex:
 				print(fmtstr("[news_engine][error] %s" % ex, "red"))
 			except pymongo.errors.DuplicateKeyError:
 				print(fmtstr("[news_engine][error] Duplicate Document!","red"))
+
+	def build_failed_document(self, article):
+		assert article   is not None, "article is not defined."
+		assert self.news is not None, "news is not defined."
+
+		document = {
+			   "permalink" : article.url,
+			      "origin" : self.news.url,
+			   "processed" : False,
+			"_insert_time" : arrow.utcnow().datetime
+		} 
+		return document
 
 	def build_document(self, article=None):
 		assert article   is not None, "article is not defined."
