@@ -65,6 +65,8 @@ class Engine:
 				print(fmtstr("[news_engine][error] Connection Timeout","red"))
 			except lxml.etree.XMLSyntaxError:
 				print(fmtstr("[news_engine][error] lxml parse error.","red"))
+			except UnicodeEncodeError:
+				print(fmtstr("[news_engine][error] UnicodeEncodeError","red"))
 			finally:
 				tried = tried + 1
 		if not success: raise ParseError("Cannot parse article!")
