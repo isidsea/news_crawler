@@ -26,7 +26,7 @@ class Engine:
 
 		for article in articles:
 			try:
-				print("[news_engine][debug] Parsing: %s" % article.url)
+				print("[news_engine][debug] Parsing: %s" % article.url.encode("utf-8"))
 				document = self.build_document(article)
 
 				print("[news_engine][debug] Validating...")
