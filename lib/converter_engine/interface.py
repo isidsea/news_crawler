@@ -11,7 +11,10 @@ class ConverterInterface:
 
 	@classmethod
 	def multiple_convert_and_save(self):
-		documents      = Data.get_not_converted()
+		documents = Data.get_not_converted()
+		documents = [doc for doc in documents]
+		print("[convert][debug] Converting %s document(s)" % len(documents))
+
 		mention_db     = MentionDB()
 		author_info_db = AuthorInfoDB()
 		for document in documents:

@@ -9,6 +9,7 @@ class PublishedDateValidator(Validator):
 
 	def validate(self, date=None):
 		try:
+			assert date is not None, "date is not defined"
 			Validator.validate(self, date)
 			if date.replace(tzinfo=pytz.UTC) > arrow.now().replace(days=1).datetime.replace(tzinfo=pytz.UTC):
 				raise ValidationError("Future date!")
