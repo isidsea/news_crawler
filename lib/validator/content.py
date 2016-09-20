@@ -9,5 +9,5 @@ class ContentValidator(Validator):
 		Validator.validate(self, content)
 
 		if not content: raise ValidationError("Content cannot be empty.")
-
+		return content
 	

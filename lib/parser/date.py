@@ -1,5 +1,6 @@
 from . 			  import Parser
 from ..exceptions import ParseError
+import arrow
 import dateparser
 import tzlocal
 import pytz
@@ -17,31 +18,24 @@ class DateParser(Parser):
 		assert type(str_date) is str     , "str_date should in str."	
 
 		# manual date conversion
-		str_date = str_date.lower().replace("jum'at","jumat")
+		if "jum'at" in str_date:
+			str_date = str_date.lower().replace("jum'at","jumat")
 		
 		try:
 			result = dateparser.parse(str_date)
-			if result.tzinfo is None: result = tzlocal.get_localzone().localize(result, is_dst=None)
+			if result is None:
+				result = arrow.get(str_date).datetime
+			if result.tzinfo is None: 
+				result = tzlocal.get_localzone().localize(result, is_dst=None)
 			result = result.astimezone(pytz.utc)
 		except AttributeError as attr_err:
 			raise ParseError("Date cannot be parsed. (%s)" % str_date)
-			# str_date = bson.json_util.dumps({"date":str_date})
-			# print("[date_parser][error] {}".format(str_date))
-			# print("[date_parser][error] DATE ERROR!")
-			# result = None
-			# result = arrow.utcnow().datetime
-			# raise
 		except ValueError as value_error:
 			raise ParseError("Date cannot be parsed. (%s)" % str_date)
-			# str_date = bson.json_util.dumps({"date":str_date})
-			# print("[date_parser][error] {}".format(str_date))
-			# print("[date_parser][error] DATE ERROR!")
-			# result = None
-			# result = arrow.utcnow().datetime
-			# raise
+		except arrow.parser.ParserError:
+			raise ParseError("Date cannot be parsed. (%s)" % str_date)
 		except:
 			raise
-		#end try
 
 		if result is not None:
 			assert type(result) is datetime.datetime, "result is not datetime."

@@ -2,6 +2,7 @@ import dateparser
 import tzlocal
 import pytz
 import datetime
+import lxml
 
 class Tools:
 	def __init__(self):

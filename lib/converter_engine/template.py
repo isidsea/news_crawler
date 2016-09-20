@@ -118,7 +118,6 @@ class MentionTemplate(object):
 	@MentionCreatedDate.setter
 	def MentionCreatedDate(self,value):
 		date                      = arrow.get(value)
-		date                      = date.to("Asia/Singapore")
 		date                      = date.format("YYYY-MM-DD HH:mm:ss")
 		self.mention_created_date = date
 
@@ -255,6 +254,7 @@ class MentionTemplate(object):
 	@DateInsertedIntoCrawlerDBISO.setter
 	def DateInsertedIntoCrawlerDBISO(self, value):
 		date                                   = arrow.get(value)
+		date                                   = date.to("Asia/Singapore")
 		date                                   = date.format("YYYY-MM-DDTHH:mm:ss")
 		date                                   = date  + "Z"
 		self.date_inserted_into_crawler_db_iso = date
@@ -272,11 +272,12 @@ class MentionTemplate(object):
 
 	@property
 	def DateInsertedIntoCentralDBISO(self):
-		return self.date_inserted_into_crawler_db_iso
+		return self.date_inserted_into_central_db_iso
 
 	@DateInsertedIntoCentralDBISO.setter
 	def DateInsertedIntoCentralDBISO(self, value):
 		date                                   = arrow.get(value)
+		date                                   = date.to("Asia/Singapore")
 		date                                   = date.format("YYYY-MM-DDTHH:mm:ss")
 		date                                   = date  + "Z"
 		self.date_inserted_into_central_db_iso = date	
@@ -295,5 +296,8 @@ class MentionTemplate(object):
 
 	@Country.setter
 	def Country(self, value):
+		if value == "VIET NAM":
+			self.country = "VIETNAM"
+		self.country = self.country.replace(" ","_")
 		self.country = value
 	

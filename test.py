@@ -4,6 +4,7 @@ from lib.exceptions 	   import NetworkError, ValidationError, ParseError
 from lib.validator.factory import ValidatorFactory
 from lib.parser.factory    import ParserFactory
 from lib.news 			   import News
+import bson.json_util
 import glob
 import os
 import importlib
@@ -47,14 +48,21 @@ if __name__ == "__main__":
 		module  = importlib.import_module("src.%s" % file_name)
 		crawler = module.Crawler()
 
-		content_status        = Status.NONE
-		title_status          = Status.NONE
-		published_date_status = Status.NONE
-		author_name_status    = Status.NONE
-		article_status 		  = Status.NONE
-		test_links            = random.sample(crawler.CATEGORY_LINKS,1 if len(crawler.CATEGORY_LINKS) == 1 else 3)
+		
 		try:
+			test_links = random.sample(crawler.CATEGORY_LINKS,1 if len(crawler.CATEGORY_LINKS) == 1 else 3)
 			for link in test_links:
+				title 		   = None
+				content 	   = None
+				author_name    = None
+				published_date = None
+
+				content_status        = Status.NONE
+				title_status          = Status.NONE
+				published_date_status = Status.NONE
+				author_name_status    = Status.NONE
+				article_status 		  = Status.NONE
+
 				news 			   = News()
 				news.url 		   = link
 				news.article_xpath = crawler.ARTICLE_XPATH
@@ -78,23 +86,30 @@ if __name__ == "__main__":
 
 				content_status    = Status.FAILED
 				content_validator = ValidatorFactory.get_validator(ValidatorFactory.CONTENT)
-				content_validator.validate(article.content)
-				content_status = Status.SUCCESS
+				content           = content_validator.validate(article.content)
+				content_status    = Status.SUCCESS
 
 				title_status      = Status.FAILED
 				content_validator = ValidatorFactory.get_validator(ValidatorFactory.CONTENT)
-				content_validator.validate(article.title)
-				title_status = Status.SUCCESS
+				title             = content_validator.validate(article.title)
+				title_status      = Status.SUCCESS
 
 				published_date_status    = Status.FAILED
 				pubslihed_date_validator = ValidatorFactory.get_validator(ValidatorFactory.PUBLISHED_DATE)
-				pubslihed_date_validator.validate(article.published_date)
-				published_date_status = Status.SUCCESS
+				published_date           = pubslihed_date_validator.validate(article.published_date)
+				published_date_status    = Status.SUCCESS
 
 				author_name_status    = Status.FAILED
 				author_name_validator = ValidatorFactory.get_validator(ValidatorFactory.AUTHOR)
-				author_name_validator.validate(article.author_name)
-				author_name_status = Status.SUCCESS
+				author_name           = author_name_validator.validate(article.author_name)
+				author_name_status    = Status.SUCCESS
+			document = {
+				         "title" : title,
+				       "content" : content,
+				   "author_name" : author_name,
+				"pubslihed_date" : published_date
+			}
+			print(bson.json_util.dumps(document,indent=4))
 		except AssertionError as ex:
 			print(fmtstr("[test][error] %s" % ex, "red"))
 		except NetworkError as ex:

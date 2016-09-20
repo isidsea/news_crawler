@@ -13,5 +13,6 @@ class PublishedDateValidator(Validator):
 			Validator.validate(self, date)
 			if date.replace(tzinfo=pytz.UTC) > arrow.now().replace(days=1).datetime.replace(tzinfo=pytz.UTC):
 				raise ValidationError("Future date!")
+			return date
 		except AssertionError:
 			raise ValidationError("No published_date!")

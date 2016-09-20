@@ -9,5 +9,6 @@ class AuthorValidator(Validator):
 		Validator.validate(self, content)
 
 		if not content: raise ValidationError("Author cannot be empty.")
+		return content
 
 	
