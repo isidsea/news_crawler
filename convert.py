@@ -1,4 +1,3 @@
-from lib.data  					    import Data
 from lib.converter_engine.interface import ConverterInterface
 
 if __name__ == "__main__":

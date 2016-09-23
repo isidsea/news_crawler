@@ -4,6 +4,7 @@ import glob
 import os
 import importlib
 import shutil
+import io
 
 class Builder:
 	def __init__(self):
@@ -23,7 +24,9 @@ class Builder:
 		print("[build][debug] Copying files...")
 		lib_folder = os.path.join(os.getcwd(), "lib")
 		shutil.copy(os.path.join(os.getcwd(),"run.py"), os.path.join(build_folder,"run.py"))
+		shutil.copy(os.path.join(os.getcwd(),"convert.py"), os.path.join(build_folder,"convert.py"))
 		shutil.copy(os.path.join(lib_folder,"network_tools.py"), os.path.join(build_folder,"lib","network_tools.py"))
+		shutil.copy(os.path.join(lib_folder,"data.py"), os.path.join(build_folder,"lib","data.py"))
 		shutil.copy(os.path.join(lib_folder,"database.py"), os.path.join(build_folder,"lib","database.py"))
 		shutil.copy(os.path.join(lib_folder,"exceptions.py"), os.path.join(build_folder,"lib","exceptions.py"))
 		shutil.copy(os.path.join(lib_folder,"proxy_switcher.py"), os.path.join(build_folder,"lib","proxy_switcher.py"))
@@ -67,7 +70,7 @@ class Builder:
 				)
 				file_name     = "%s_%s.py" % (module.CRAWLER_NAME, index)
 				file_name     = file_name.replace(" ","_")
-				template_file = open(os.path.join(build_folder,"crawlers",file_name), "w")
+				template_file = io.open(os.path.join(build_folder,"crawlers",file_name), "w", encoding="utf8")
 				template_file.write(template)
 				template_file.flush()
 				template_file.close()
