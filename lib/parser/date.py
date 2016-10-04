@@ -18,7 +18,7 @@ class DateParser(Parser):
 		assert type(str_date) is str     , "str_date should in str."	
 
 		# manual date conversion
-		if "jum'at" in str_date:
+		if "jum'at" in str_date.lower():
 			str_date = str_date.lower().replace("jum'at","jumat")
 		
 		try:
@@ -29,11 +29,11 @@ class DateParser(Parser):
 				result = tzlocal.get_localzone().localize(result, is_dst=None)
 			result = result.astimezone(pytz.utc)
 		except AttributeError as attr_err:
-			raise ParseError("Date cannot be parsed. (%s)" % str_date)
+			raise ParseError("Date cannot be parsed. AttributeError (%s)" % str_date)
 		except ValueError as value_error:
-			raise ParseError("Date cannot be parsed. (%s)" % str_date)
+			raise ParseError("Date cannot be parsed. ValueError (%s)" % str_date)
 		except arrow.parser.ParserError:
-			raise ParseError("Date cannot be parsed. (%s)" % str_date)
+			raise ParseError("Date cannot be parsed. ArrowError (%s)" % str_date)
 		except:
 			raise
 

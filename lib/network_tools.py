@@ -4,6 +4,7 @@ from .exceptions     import NetworkError
 from lxml 			 import html
 import requests
 import socket
+import lxml
 
 class NetworkTools:
 	def __init__(self):

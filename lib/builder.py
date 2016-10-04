@@ -24,6 +24,7 @@ class Builder:
 		print("[build][debug] Copying files...")
 		lib_folder = os.path.join(os.getcwd(), "lib")
 		shutil.copy(os.path.join(os.getcwd(),"run.py"), os.path.join(build_folder,"run.py"))
+		shutil.copy(os.path.join(os.getcwd(),"kick_start.sh"), os.path.join(build_folder,"kick_start.sh"))
 		shutil.copy(os.path.join(os.getcwd(),"convert.py"), os.path.join(build_folder,"convert.py"))
 		shutil.copy(os.path.join(lib_folder,"network_tools.py"), os.path.join(build_folder,"lib","network_tools.py"))
 		shutil.copy(os.path.join(lib_folder,"data.py"), os.path.join(build_folder,"lib","data.py"))
