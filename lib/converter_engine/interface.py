@@ -26,6 +26,7 @@ class ConverterInterface:
 
 				author_info_db.generate_info(converted_document)
 				author_info_db.save()
+				print(fmtstr("[convert][success] Inserted One Document!","green"))
 			except pymongo.errors.DuplicateKeyError:
 				print(fmtstr("[convert][error] Duplicate Document!","red"))
 			finally:
